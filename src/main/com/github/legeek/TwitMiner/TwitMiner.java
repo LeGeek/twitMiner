@@ -10,6 +10,7 @@ import java.util.List;
 public class TwitMiner {
     private int maxResult;
     private Twitter twitter;
+    private Query query;
     private QueryResult queryResult;
     private List<Status> tweetList;
 
@@ -19,17 +20,19 @@ public class TwitMiner {
     }
 
     public void query(String search) throws TwitterException {
-        queryResult = twitter.search(new Query(search));
+        query = new Query(search);
+        queryResult = twitter.search(query);
     }
 
-    public void executeQuery() {
+    public void executeQuery() throws TwitterException {
         if(queryResult == null) {
             return;
         }
 
         tweetList = queryResult.getTweets();
 
-        while(queryResult.nextQuery() != null && tweetList.size() < maxResult) {
+        while((query = queryResult.nextQuery()) != null && tweetList.size() < maxResult) {
+            queryResult = twitter.search(query);
             tweetList.addAll(queryResult.getTweets());
         }
     }
