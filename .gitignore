@@ -1,4 +1,5 @@
+# === Directories === #
 .idea/
-*.iml
+.out/
 
-twitter4j.properties
+*.iml
